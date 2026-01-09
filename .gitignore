@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### FRONTEND / REACT ###
+node_modules/
+frontend/node_modules/
+
+# React build
+frontend/build/
+frontend/dist/
+
+# Env files
+frontend/.env
+frontend/.env.local
+frontend/.env.production
