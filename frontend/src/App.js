@@ -47,8 +47,9 @@ export default function App() {
       <Routes>
 
         {/* ========== PUBLIC ROUTES ========== */}
-        <Route path="/" element={<CompanyRegistration />} />
+        
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<CompanyRegistration />} />
 
         {/* ========== ADMIN ROUTES ========== */}
         <Route

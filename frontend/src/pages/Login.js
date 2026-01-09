@@ -93,6 +93,12 @@ setError("Something went wrong. Please try again.");
 
           <button type="submit" style={styles.button}>Login</button>
         </form>
+         <button
+        onClick={() => navigate("/register")}
+        style={{ ...styles.button, background: "#c81114ff" }}
+      >
+        No account? Register First
+      </button>
 
         <div style={styles.footer}>© 2025 CRM System</div>
       </div>
@@ -146,7 +152,7 @@ const styles = {
     marginTop: 10,
     borderRadius: 8,
     border: "none",
-    backgroundColor: "#667eea",
+    backgroundColor: "#711339ff",
     color: "#fff",
     fontWeight: 600,
     cursor: "pointer"
