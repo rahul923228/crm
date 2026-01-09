@@ -29,9 +29,9 @@ public class SupportAsignController {
     }
 
     @GetMapping("/getSupport/{customerId}/{ticketId}")
-    public List<Long> getSupportAsign(@PathVariable Long ticketId,@PathVariable Long customerId){
+    public List<SupportAsignModal> getSupportAsign(@PathVariable Long ticketId,@PathVariable Long customerId){
 
-        return service.getSupportAsign(ticketId, customerId);
+        return service.getSupportA(ticketId, customerId);
 
     }
 

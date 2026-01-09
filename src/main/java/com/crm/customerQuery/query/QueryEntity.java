@@ -29,8 +29,6 @@ public class QueryEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
       Long id;
-
-Long customer_id;
 String projectName;
 String discussion;
 LocalDateTime call_date;
@@ -38,6 +36,7 @@ String deal_status;
 LocalDateTime next_followup;
 LocalDateTime created_at;
 LocalDateTime updated_at;
+private String remark;
 
 @ManyToOne
 @JoinColumn(name="newCustomer_id")

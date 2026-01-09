@@ -15,6 +15,7 @@ public class NewCustomerModal {
     String number;
     String email;
    String status;
+   private String remark;
    LocalDateTime created_at;
    LocalDateTime updated_at;
 }

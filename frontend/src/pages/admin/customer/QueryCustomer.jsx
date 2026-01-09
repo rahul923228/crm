@@ -1,12 +1,14 @@
-import React, { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 
 export default function AddCustomer() {
   const [customer, setCustomer] = useState({
     name: "",
     number: "",
     email: "",
-    status: ""
+    status: "",
+    remark:""
+
   });
 
   const [message, setMessage] = useState("");
@@ -71,17 +73,17 @@ export default function AddCustomer() {
           />
         </label>
 
-        {/* <label style={styles.label}>
-          Status:
-          <input
+        <label style={styles.label}>
+          Remark
+          <textarea
             type="text"
-            name="status"
-            value={customer.status}
+            name="remark"
+            value={customer.remark}
             onChange={handleChange}
-            required
+      
             style={styles.input}
           />
-        </label> */}
+        </label>
 
         <button type="submit" style={styles.button}>
           Save Customer

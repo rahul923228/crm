@@ -40,6 +40,7 @@ public class TicketEntity {
     String status;
     LocalDate deliveryDate;
     LocalDateTime createdTicket;
+    private String remark;
 
     @PrePersist
     protected void onCreate(){

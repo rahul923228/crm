@@ -50,7 +50,8 @@ const AddTask = () => {
         status: "OPEN",
         dueDate: "",
         assignedBy: task.assignedBy,
-        userId: userId
+        userId: userId,
+        remark:""
       });
 
     } catch (error) {
@@ -104,18 +105,7 @@ const AddTask = () => {
                 </select>
               </div>
 
-              <div>
-                <label>Status</label>
-                <select
-                  name="status"
-                  value={task.status}
-                  onChange={handleChange}
-                >
-                  <option value="OPEN">Open</option>
-                  <option value="IN_PROGRESS">In Progress</option>
-                  <option value="COMPLETED">Completed</option>
-                </select>
-              </div>
+             
             </div>
 
             <label>Due Date *</label>
@@ -124,6 +114,14 @@ const AddTask = () => {
               name="dueDate"
               value={task.dueDate}
               onChange={handleChange}
+            />
+
+             <label>Remark</label>
+            <textarea
+              name="remark"
+              value={task.remark}
+              onChange={handleChange}
+              placeholder="......"
             />
 
             <button type="submit" disabled={loading}>

@@ -3,6 +3,7 @@ package com.crm.chatSupport.supportAsign;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -101,5 +102,41 @@ public class SupportAsignService {
     }
 
     return empIds;
+}
+
+
+ public List<SupportAsignModal> getSupportA(
+        Long ticketId,
+        Long customerId
+) {
+
+    TicketEntity ticket =
+        ticketRepo.findById(ticketId)
+        .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+    // 🔒 Ownership check
+    if (!ticket.getCustomer().getId().equals(customerId)) {
+        throw new RuntimeException("Ticket does not belong to this customer");
+    }
+
+    List<SupportAsignModal> listModals = new ArrayList<>();
+
+    for (SupportAsingEntity entity : ticket.getAsignTicketList()) {
+
+        SupportAsignModal modal=new SupportAsignModal();
+       BeanUtils.copyProperties(entity, modal);
+
+       modal.setCustomer_id(customerId);
+       modal.setEmp_id(entity.getBasicEntity().getId());
+       modal.setId(entity.getId());
+       modal.setStatus(entity.getStatus());
+       modal.setTicket_id(ticketId);
+       
+       listModals.add(modal);
+       
+       
+    }
+
+    return listModals;
 }
 }

@@ -19,6 +19,7 @@ public class CustomerModal {
     private String stutes;
      private String industryType;
      LocalDate createdDate;
+     private String remark;
 
      private Long user_id;
 

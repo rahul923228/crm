@@ -15,6 +15,7 @@ public class QueryModal {
 Long newCustomer_id;
 String projectName;
 String discussion;
+private String remark;
 LocalDateTime call_date;
 String deal_status;
 LocalDateTime next_followup;

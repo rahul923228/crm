@@ -39,6 +39,8 @@ public class CustomerEntity {
      private String industryType;
      LocalDate createdDate;
 
+     private String remark;
+
      @ManyToOne
      @JoinColumn(name="user_id")
      private  UserEntity userEntity;

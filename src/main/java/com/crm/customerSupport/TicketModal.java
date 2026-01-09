@@ -21,6 +21,7 @@ public class TicketModal {
     LocalDateTime createdTicket;
    private String sender;
      String customerName;
+     private String remark;
     String projectName;
     private String time;
 

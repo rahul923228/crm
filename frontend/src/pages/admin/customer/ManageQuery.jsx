@@ -7,40 +7,14 @@ const ManageQuery = () => {
   const [loading, setLoading] = useState(true);
   const [showInactive, setShowInactive] = useState(false);
 
-  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-  const [formData, setFormData] = useState({});
-  const [updating, setUpdating] = useState(false);
-
   const navigate = useNavigate();
-
-  /* ================= SAFE DATE FORMAT ================= */
-  const formatDateTime = (dt) => {
-    if (!dt) return "-";
-    const safe = dt.replace(" ", "T"); // FIX for backend format
-    const d = new Date(safe);
-    if (isNaN(d)) return "-";
-
-    return d
-      .toLocaleString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false
-      })
-      .replace(",", " |");
-  };
 
   /* ================= FETCH CUSTOMERS ================= */
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8080/api/getNewCustomer"
-      );
-      console.log("CUSTOMERS =>", res.data); // DEBUG
+      const res = await axios.get("http://localhost:8080/api/getNewCustomer");
       setCustomers(res.data || []);
-    } catch (err) {
+    } catch {
       alert("Failed to load customers");
     } finally {
       setLoading(false);
@@ -51,11 +25,11 @@ const ManageQuery = () => {
     fetchCustomers();
   }, []);
 
-  /* ================= STATUS UPDATE ================= */
-  const updateStatus = async (customerId, status) => {
+  /* ================= UPDATE STATUS ================= */
+  const updateStatus = async (id, status) => {
     try {
       await axios.put(
-        `http://localhost:8080/api/newCustomer/updateStatus/${customerId}`,
+        `http://localhost:8080/api/newCustomer/updateStatus/${id}`,
         null,
         { params: { status } }
       );
@@ -65,58 +39,8 @@ const ManageQuery = () => {
     }
   };
 
-  /* ================= VIEW QUERY ================= */
-  const viewCustomerQueries = async (customerId) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8080/api/findQuery/${customerId}`
-      );
+  if (loading) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
-      if (!res.data || res.data.length === 0) {
-        alert("No query found");
-        return;
-      }
-
-      const q = res.data[0];
-      setSelectedCustomerId(customerId);
-      setFormData({
-        projectName: q.projectName || "",
-        discussion: q.discussion || "",
-        call_date: q.call_date
-          ? q.call_date.replace(" ", "T").slice(0, 16)
-          : "",
-        deal_status: q.deal_status || "",
-        next_followup: q.next_followup
-          ? q.next_followup.replace(" ", "T").slice(0, 16)
-          : ""
-      });
-    } catch {
-      alert("Failed to fetch query");
-    }
-  };
-
-  /* ================= UPDATE QUERY ================= */
-  const handleUpdateQuery = async () => {
-    setUpdating(true);
-    try {
-      await axios.put(
-        `http://localhost:8080/api/updateQuery/${selectedCustomerId}`,
-        formData
-      );
-      alert("Query updated successfully");
-      setSelectedCustomerId(null);
-    } catch {
-      alert("Query update failed");
-    } finally {
-      setUpdating(false);
-    }
-  };
-
-  if (loading) {
-    return <p style={{ textAlign: "center" }}>Loading...</p>;
-  }
-
-  /* ================= SAFE FILTER ================= */
   const activeCustomers = customers.filter(
     (c) => c.status?.toLowerCase() === "active"
   );
@@ -127,7 +51,7 @@ const ManageQuery = () => {
 
   return (
     <div className="manage-page">
-      <h2>Manage Customer Queries</h2>
+      <h2>Manage Customers</h2>
 
       <button
         className="btn inactive-toggle"
@@ -136,92 +60,74 @@ const ManageQuery = () => {
         Inactive Customers ({inactiveCustomers.length})
       </button>
 
-      {/* ================= ACTIVE ================= */}
-      <div className="table-wrapper">
-        <h3>Active Customers</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Number</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Created</th>
-              <th>Updated</th>
-              <th>Actions</th>
+      {/* ================= ACTIVE CUSTOMERS ================= */}
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Number</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {activeCustomers.map((c) => (
+            <tr key={c.id}>
+              <td>{c.id}</td>
+              <td>{c.name}</td>
+              <td>{c.number}</td>
+              <td>
+                <select
+                  className="status-select"
+                  value={c.status}
+                  onChange={(e) =>
+                    updateStatus(c.id, e.target.value)
+                  }
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </td>
+              <td className="action-col">
+                <button
+                  className="btn add-btn"
+                  onClick={() =>
+                    navigate(`/admin/query/${c.id}`)
+                  }
+                >
+                  Add Query
+                </button>
+
+                <button
+                  className="btn view-btn"
+                  onClick={() =>
+                    navigate(`/admin/list/${c.id}`)
+                  }
+                >
+                  View Queries
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {activeCustomers.map((c) => (
-              <tr key={c.id}>
-                <td>{c.id}</td>
-                <td>{c.name}</td>
-                <td>{c.number}</td>
-                <td>{c.email}</td>
-                <td>
-                  <span className="badge active">Active</span>
-                </td>
-                <td>{formatDateTime(c.created_at)}</td>
-                <td>{formatDateTime(c.updated_at)}</td>
-                <td className="actions">
-                  <select
-                    className="status-select"
-                    value={c.status}
-                    onChange={(e) =>
-                      updateStatus(c.id, e.target.value)
-                    }
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
+          ))}
+        </tbody>
+      </table>
 
-                  <button
-                    className="btn view-query"
-                    onClick={() =>
-                      navigate(`/admin/query/${c.id}`)
-                    }
-                  >
-                    Add Query
-                  </button>
-
-                  <button
-                    className="btn view-query"
-                    onClick={() =>
-                      viewCustomerQueries(c.id)
-                    }
-                  >
-                    View / Update
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* ================= INACTIVE ================= */}
+      {/* ================= INACTIVE CUSTOMERS ================= */}
       {showInactive && (
-        <div className="table-wrapper">
-          <h3>Inactive Customers</h3>
+        <div className="inactive-section">
+          <h3 className="inactive-title">Inactive Customers</h3>
           <table>
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Name</th>
-                <th>Number</th>
-                <th>Email</th>
                 <th>Status</th>
-                
               </tr>
             </thead>
             <tbody>
               {inactiveCustomers.map((c) => (
                 <tr key={c.id}>
-                  <td>{c.id}</td>
                   <td>{c.name}</td>
-                  <td>{c.number}</td>
-                  <td>{c.email}</td>
                   <td>
                     <select
                       className="status-select"
@@ -234,7 +140,6 @@ const ManageQuery = () => {
                       <option value="Active">Activate</option>
                     </select>
                   </td>
-                 
                 </tr>
               ))}
             </tbody>
@@ -242,90 +147,95 @@ const ManageQuery = () => {
         </div>
       )}
 
-      {/* ================= MODAL ================= */}
-      {selectedCustomerId && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Update Query</h3>
-            <button
-              className="close-btn"
-              onClick={() =>
-                setSelectedCustomerId(null)
-              }
-            >
-              X
-            </button>
-
-            {Object.keys(formData).map((key) => (
-              <div className="form-group" key={key}>
-                <label>{key.replace("_", " ")}</label>
-
-                {key.includes("date") ||
-                key.includes("followup") ? (
-                  <input
-                    type="datetime-local"
-                    value={formData[key]}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        [key]: e.target.value
-                      })
-                    }
-                  />
-                ) : key === "discussion" ? (
-                  <textarea
-                    value={formData[key]}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        [key]: e.target.value
-                      })
-                    }
-                  />
-                ) : (
-                  <input
-                    value={formData[key]}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        [key]: e.target.value
-                      })
-                    }
-                  />
-                )}
-              </div>
-            ))}
-
-            <button
-              className="btn update-query"
-              onClick={handleUpdateQuery}
-              disabled={updating}
-            >
-              {updating ? "Updating..." : "Update Query"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ================= STYLES ================= */}
+      {/* ================= CSS ================= */}
       <style>{`
-        .manage-page { padding:30px; background:#f4f6f8; min-height:100vh; }
-        .table-wrapper { background:#fff; padding:15px; border-radius:8px; margin-top:15px; }
-        table { width:100%; border-collapse:collapse; }
-        th,td { padding:12px; border-bottom:1px solid #e5e7eb; }
-        .badge { padding:4px 12px; border-radius:20px; color:#fff; font-size:12px; }
-        .badge.active { background:#22c55e; }
-        .actions { display:flex; gap:8px; }
-        .btn { padding:6px 12px; border:none; border-radius:6px; cursor:pointer; font-weight:600; }
-        .view-query { background:#3b82f6; color:#fff; }
-        .update-query { background:#10b981; color:#fff; }
-        .inactive-toggle { background:#6b7280; color:#fff; margin-bottom:10px; }
-        .status-select { padding:6px; border-radius:6px; }
-        .modal { position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; }
-        .modal-content { background:#fff; padding:20px; border-radius:8px; width:500px; position:relative; }
-        .close-btn { position:absolute; top:10px; right:10px; background:#ef4444; color:#fff; border:none; padding:4px 8px; cursor:pointer; }
-        .form-group { margin-bottom:12px; }
-        input, textarea { width:100%; padding:6px; }
+        .manage-page {
+          padding: 30px;
+          background: #f4f6f8;
+          min-height: 100vh;
+        }
+
+        h2 {
+          margin-bottom: 15px;
+          font-size: 22px;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          background: #ffffff;
+          border-radius: 8px;
+          overflow: hidden;
+          margin-top: 10px;
+        }
+
+        th, td {
+          padding: 12px;
+          border-bottom: 1px solid #e5e7eb;
+          text-align: left;
+          font-size: 14px;
+        }
+
+        th {
+          background: #f1f5f9;
+          font-weight: 600;
+        }
+
+        tr:hover {
+          background: #f9fafb;
+        }
+
+        .btn {
+          padding: 6px 14px;
+          border-radius: 6px;
+          border: none;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 13px;
+        }
+
+        .add-btn {
+          background: #10b981;
+          color: #ffffff;
+        }
+
+        .view-btn {
+          background: #3b82f6;
+          color: #ffffff;
+        }
+
+        .inactive-toggle {
+          background: #6b7280;
+          color: #ffffff;
+          margin-bottom: 10px;
+        }
+
+        .action-col {
+          display: flex;
+          gap: 8px;
+        }
+
+        .status-select {
+          padding: 6px;
+          border-radius: 6px;
+          border: 1px solid #d1d5db;
+          font-size: 13px;
+        }
+
+        .inactive-section {
+          margin-top: 20px;
+        }
+
+        .inactive-title {
+          margin-bottom: 8px;
+          font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+          .action-col {
+            flex-direction: column;
+          }
+        }
       `}</style>
     </div>
   );

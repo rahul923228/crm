@@ -33,7 +33,7 @@ public class EmpWorkService {
 
 
         BeanUtils.copyProperties(modal, entity);
-        dEntity.setDepartmentName(modal.getDepartment());
+        dEntity.setDepartmentName(modal.getDepartmentName());
      
         entity.setBasic(basic);
 

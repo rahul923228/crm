@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class ChatEntity {
     private String senderName ;// CUSTOMER / SYSTEM / ADMIN
 
     @ManyToOne
+    @JoinColumn(name="ticket_id")
     private TicketEntity ticket;
 
     
@@ -39,6 +41,7 @@ private String fileName;
 private String fileUrl;
 
 private String fileType; // IMAGE / PDF / DOC
+
 
 
     private LocalDateTime createdAt = LocalDateTime.now();

@@ -109,7 +109,7 @@ export default function AddEmployee() {
             <Input label="Email" value={basic.email} onChange={e => setBasic({ ...basic, email: e.target.value })} />
             <Select label="Marital Status" value={basic.marital_status} onChange={e => setBasic({ ...basic, marital_status: e.target.value })} options={["Married","Unmarried"]} />
             <Input type="date" label="Joining Date" value={basic.date_of_joining} onChange={e => setBasic({ ...basic, date_of_joining: e.target.value })} />
-            <Select label="Employee Status" value={basic.employee_status} onChange={e => setBasic({ ...basic, employee_status: e.target.value })} options={["Active","InActive"]} />
+            {/* <Select label="Employee Status" value={basic.employee_status} onChange={e => setBasic({ ...basic, employee_status: e.target.value })} options={["Active"]} /> */}
           </div>
         )}
 
@@ -169,7 +169,7 @@ export default function AddEmployee() {
       label="Role"
       value={auth.role}
       onChange={e => setAuth({ ...auth, role: e.target.value })}
-      options={["EMPLOYEE", "SALES"]}
+      options={["EMPLOYEE"]}
     />
           </div>
         )}

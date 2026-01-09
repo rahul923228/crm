@@ -75,6 +75,7 @@ public class ChatService {
 
         System.out.println("msg"+entity.getMessage());
       BeanUtils.copyProperties(entity, modal,"ticket");
+      modal.setTicket_id(entity.getTicket().getId());
         modalList.add(modal);
 
       });

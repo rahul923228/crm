@@ -52,7 +52,7 @@ public class QueryService {
             QueryModal modal=new QueryModal();
 
             BeanUtils.copyProperties(entity, modal);
-            modal.setNewCustomer_id(entity.getCustomer_id());
+            modal.setNewCustomer_id(entity.getNewCustomerEntity().getId());
 
             modals.add(modal);
 
@@ -78,7 +78,6 @@ public class QueryService {
              entity.setDiscussion(modal.getDiscussion());
              entity.setProjectName(modal.getProjectName());
              entity.setNext_followup(modal.getNext_followup());
-             entity.setCustomer_id(customerEntity.getId());
 
             entity.setNewCustomerEntity(customerEntity);
             repo.save(entity);

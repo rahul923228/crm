@@ -70,6 +70,7 @@ public class TaskAsignService {
                 modal.setTask_id(entity.getTaskEntity().getId());
                 modal.setStatus(entity.getStatus());
                 modal.setAssignedDate(entity.getAssignedDate());
+                modal.setCustomer_id(taskEntity.getCustomerEntity().getId());
 
                 modals.add(modal);
 

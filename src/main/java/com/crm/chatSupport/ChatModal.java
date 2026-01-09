@@ -21,9 +21,14 @@ public class ChatModal {
     
 private String fileName;
 
+private String remark;
 
 private String fileUrl;
 
 private String fileType; // IMAGE / PDF / DOC
+
+
+
+private Long ticket_id;
 
 }

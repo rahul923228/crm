@@ -36,6 +36,7 @@ import AddQuery from "./pages/admin/customer/AddQuery";
 import Chats from "./pages/admin/customer/Chats";
 import ManageQuery from "./pages/admin/customer/ManageQuery";
 import Query from "./pages/admin/customer/QueryCustomer";
+import ListQuery from "./pages/admin/customer/QueryList";
 
 /* ================= EMPLOYEE ================= */
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
@@ -75,6 +76,7 @@ export default function App() {
          <Route path="query" element={<Query/>}/>
          <Route path="manageQuery" element={<ManageQuery/>}/>
          <Route path="query/:id" element={<AddQuery/>}/>
+         <Route path="list/:id" element={<ListQuery/>}/>
 
         </Route>
 

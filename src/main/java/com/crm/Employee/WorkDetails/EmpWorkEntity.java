@@ -6,7 +6,6 @@ import com.crm.Employee.BasicDetails.EmpBasicEntity;
 import com.crm.department.DepartMentEntity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,7 +29,7 @@ public class EmpWorkEntity {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
    Long id;
  
-   String department;
+   String departmentName;
 
 String designation;
 
@@ -44,7 +43,7 @@ String shift_timing;
 
 String work_mode ;
 
-@ManyToOne(fetch = FetchType.LAZY)
+@ManyToOne()
 @JoinColumn(name="emp_work_id")
 private EmpBasicEntity  basic;
 

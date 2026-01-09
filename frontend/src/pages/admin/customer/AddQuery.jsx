@@ -106,6 +106,17 @@ const AddQuery = () => {
           />
         </label>
 
+         <label>
+          Remark
+          <textarea
+            name="remark"
+            value={form.remark}
+            onChange={handleChange}
+            rows="3"
+            required
+          />
+        </label>
+
         <button type="submit" className="btn submit-btn">Add Query</button>
       </form>
 

@@ -11,7 +11,7 @@ public class EmpWorkModal {
     
     Long id;
     
-  String department;
+  String departmentName;
 
 String designation;
 

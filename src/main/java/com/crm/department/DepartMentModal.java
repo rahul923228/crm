@@ -12,5 +12,6 @@ public class DepartMentModal {
   private  Long id;
 
     private String departmentName;
+    private Long department_id;
 
 }

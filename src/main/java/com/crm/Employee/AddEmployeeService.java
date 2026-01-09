@@ -75,7 +75,7 @@ public class AddEmployeeService {
 
             dList.stream().forEach(dEntity->{
 
-                 workModal.setDepartment(dEntity.getDepartmentName());
+                 workModal.setDepartmentName(dEntity.getDepartmentName());
             workModal.setBasicId(basic.getId());
             // workModal.setDepartment(work.getDepartmentName());
             dto.setWork(workModal);
@@ -129,7 +129,7 @@ public class AddEmployeeService {
         
         BeanUtils.copyProperties(workEntity, workModal,"department");
                 DepartMentEntity dEntity=new DepartMentEntity();
-                dEntity.setDepartmentName(workModal.getDepartment());
+                dEntity.setDepartmentName(workModal.getDepartmentName());
                 dEntity.setWorkEntity(workEntity);
                 
         
@@ -163,6 +163,7 @@ public class AddEmployeeService {
         // BASIC
         EmpBasicEntity basic = new EmpBasicEntity();
         BeanUtils.copyProperties(dto.getBasic(), basic,"user");
+        basic.setEmployee_status("Active");
 
         basic.setUser(userEntity);
         basicRepo.save(basic);
@@ -179,20 +180,25 @@ public class AddEmployeeService {
        // DepartMentEntity entity=departmentRepo.findById(work.getId()).orElseThrow(() -> new RuntimeException("deaaprtment not found"));
        
        DepartMentEntity entity=new DepartMentEntity();
-       BeanUtils.copyProperties(dto.getWork(), work, "id", "basic", "department");
        
        work.setBasic(basic);
+       work.setDepartmentName(dto.getWork().getDepartmentName());
+       work.setDesignation(dto.getWork().getDesignation());
+       work.setEmployment_type(dto.getWork().getEmployment_type());
+
+       work.setReporting_manager(dto.getWork().getReporting_manager());
+       work.setShift_timing(dto.getWork().getShift_timing());
+       work.setWork_location(dto.getWork().getWork_location());
+       work.setWork_mode(dto.getWork().getWork_mode());
+       
        
 
-        entity.setDepartmentName(dto.getWork().getDepartment());
-
+        entity.setDepartmentName(dto.getWork().getDepartmentName());
         entity.setWorkEntity(work);
-       
-       
-        
-        departmentRepo.save(entity);
+       departmentRepo.save(entity);
                              
-        workRepo.save(work);
+       
+       workRepo.save(work);
 
         return "Employee added successfully";
     }

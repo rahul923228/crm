@@ -32,6 +32,7 @@ public class NewCustomerEntity{
     String name;
     String number;
     String email;
+    private String remark;
    String status;
    LocalDateTime created_at;
    LocalDateTime updated_at;

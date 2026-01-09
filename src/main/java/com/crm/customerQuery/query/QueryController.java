@@ -27,8 +27,7 @@ public class QueryController {
         return service.addQuery(modal, customerId);
     }
 
-    @GetMapping("/findQuery/{customerId}")
-
+    @GetMapping("/getQuery/{customerId}")
     public List<QueryModal>findQuery(@PathVariable Long customerId){
 
         return service.findQuery(customerId);
